@@ -1,45 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <title>Карта Leaflet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8" />
+  <title>TrinulMap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+eFh1ldGflxzMZewzN8QkGzW+jrA9H3b0nE7Vk2EY="
+    crossorigin=""
+  />
   <style>
-    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    body, html, #map {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+    }
   </style>
 </head>
 <body>
+  <div id="map"></div>
 
-<div id="map"></div>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1jG+fUgnI4OfuELG9eUGdeDk0ZIoRkGc5fX1pFfA="
+    crossorigin=""
+  ></script>
+  <script>
+    // Размер изображения в пикселях
+    const imageWidth = 10000;
+    const imageHeight = 6000;
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-  const imageWidth = 10000;
-  const imageHeight = 6000;
+    // Создаём карту и отключаем минимальный зум (отдаление)
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      minZoom: 0,
+      maxZoom: 5,   // Вы можете настроить максимальный масштаб (приближение)
+      zoomSnap: 0.1,
+    });
 
-  const bounds = [[0, 0], [imageHeight, imageWidth]];
+    // Координаты для привязки изображения (левая верхняя и правая нижняя точки)
+    const bounds = [[0, 0], [imageHeight, imageWidth]];
 
-  const map = L.map('map', {
-    crs: L.CRS.Simple,
-    maxZoom: 4,
-    // minZoom будем устанавливать динамически после fitBounds
-    zoomSnap: 0.1,
-    zoomDelta: 0.5,
-    // не задаём maxBounds, чтобы позволить отдалять
-  });
+    // Добавляем изображение на карту
+    const image = L.imageOverlay('karta.png', bounds).addTo(map);
 
-  L.imageOverlay('karta.png', bounds).addTo(map);
-
-  // После загрузки DOM
-  document.addEventListener('DOMContentLoaded', () => {
+    // Устанавливаем вид так, чтобы вся карта была видна сразу
     map.fitBounds(bounds);
 
-    // Задаём minZoom равным текущему уровню зума (чтобы нельзя было отдалиться еще дальше)
-    const currentZoom = map.getZoom();
-    map.setMinZoom(currentZoom);
-  });
-</script>
+    // Запрещаем пользователю отдаляться дальше исходного масштаба (minZoom = текущий зум после fitBounds)
+    const initialZoom = map.getZoom();
+    map.setMinZoom(initialZoom);
 
+    // Также можно заблокировать перетаскивание карты за пределы изображения
+    map.setMaxBounds(bounds);
+  </script>
 </body>
 </html>
