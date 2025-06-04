@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Моя карта на Leaflet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet стили -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Leaflet скрипт -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Размер изображения карты в пикселях
+    const imageWidth = 10000;  // замени на ширину твоей карты
+    const imageHeight = 6000; // замени на высоту твоей карты
+
+    // Создаем карту в CRS.Simple — плоская система координат
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      minZoom: -5
+    });
+
+    const bounds = [[0, 0], [imageHeight, imageWidth]];
+    const image = L.imageOverlay('map.png', bounds).addTo(map);
+    map.fitBounds(bounds);
+  </script>
+</body>
+</html>
