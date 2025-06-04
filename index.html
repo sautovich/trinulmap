@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Моя карта на Leaflet</title>
+  <title>TrinulianMaps</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet стили -->
@@ -33,7 +33,7 @@
     });
 
     const bounds = [[0, 0], [imageHeight, imageWidth]];
-    const image = L.imageOverlay('map.png', bounds).addTo(map);
+    const image = L.imageOverlay('karta.png', bounds).addTo(map);
     map.fitBounds(bounds);
   </script>
 </body>
