@@ -2,45 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Моя карта</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Карта Leaflet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    html, body, #map {
-      height: 100%;
-      margin: 0; padding: 0;
-    }
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
   </style>
 </head>
 <body>
 
-  <div id="map"></div>
+<div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const imageWidth = 10000;
-    const imageHeight = 6000;
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const imageWidth = 10000;
+  const imageHeight = 6000;
 
-    const bounds = [[0, 0], [imageHeight, imageWidth]];
+  const bounds = [[0, 0], [imageHeight, imageWidth]];
 
-    const map = L.map('map', {
-      crs: L.CRS.Simple,
-      maxZoom: 4,
-      minZoom: 0,
-      zoomSnap: 0.1,
-      zoomDelta: 0.5,
-      maxBounds: bounds,
-      maxBoundsViscosity: 1.0
-    });
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    maxZoom: 4,
+    // minZoom будем устанавливать динамически после fitBounds
+    zoomSnap: 0.1,
+    zoomDelta: 0.5,
+    // не задаём maxBounds, чтобы позволить отдалять
+  });
 
-    L.imageOverlay('karta.png', bounds).addTo(map);
+  L.imageOverlay('karta.png', bounds).addTo(map);
 
-    // Ждём, пока DOM загрузится
-    document.addEventListener("DOMContentLoaded", function () {
-      // Вызываем fitBounds, чтобы вся карта помещалась
-      map.fitBounds(bounds);
-    });
-  </script>
+  // После загрузки DOM
+  document.addEventListener('DOMContentLoaded', () => {
+    map.fitBounds(bounds);
+
+    // Задаём minZoom равным текущему уровню зума (чтобы нельзя было отдалиться еще дальше)
+    const currentZoom = map.getZoom();
+    map.setMinZoom(currentZoom);
+  });
+</script>
+
 </body>
 </html>
